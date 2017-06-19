@@ -103,6 +103,13 @@ function tp --description 'Teleport through folders'
     end
 
     set tmp (cat ~/.config/fish/completions/tp.fish | grep "JUMP-SITE-INFO: $argv[2]")
+    if [ $status != 0 ]
+      set_color red
+      printf "Unknown jump site %s\n" "$argv[2]"
+      set_color normal
+      return 1
+    end
+    
     if test -n $tmp
       set site (echo "$tmp" | sed -E "s/.*: (.*);.*/\1/g")
       set url (echo "$tmp" | sed -E "s/.*: .*;(.*)/\1/g")
